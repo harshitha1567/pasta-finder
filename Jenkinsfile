@@ -7,13 +7,6 @@ pipeline {
     }
 
     stages {
-        stage('Checkout') {
-            steps {
-                // Replace with your actual Git repo URL
-                git branch: 'main', url: '<YOUR_GIT_REPO_URL>'
-            }
-        }
-
         stage('Build Docker Image') {
             steps {
                 script {
