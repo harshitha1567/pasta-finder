@@ -1,0 +1,12 @@
+.git
+__pycache__
+*.pyc
+.env
+__MACOSX
+.DS_Store
+venv/
+.venv/
+recipes.db
+.gitignore
+.dockerignore
+Jenkinsfile

@@ -1,0 +1,25 @@
+# Secrets
+.env
+
+# Database (generated at runtime)
+recipes.db
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+venv/
+.venv/
+
+# OS
+.DS_Store
+__MACOSX/
+Thumbs.db
+
+# Docker
+docker-compose.override.yml
+
+# IDE
+.vscode/
+.idea/
