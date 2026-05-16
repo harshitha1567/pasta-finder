@@ -163,6 +163,10 @@ Return STRICT JSON ONLY:
   ]}}
 """
 
+    if not client:
+        return {"ai_generated": True, "error": "AI client not configured (missing GROQ_API_KEY)"}
+
+    raw = ""
     try:
         response = client.chat.completions.create(
             model="llama-3.1-8b-instant",
