@@ -1,211 +1,242 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="UTF-8">
-<title>Smart Recipe Finder</title>
-<style>
-    body {
-        font-family: Arial, sans-serif;
-        margin: 0;
-        padding: 20px;
-        background: #f8f8f8;
-    }
-    .container {
-        max-width: 800px;
-        margin: auto;
-        background: white;
-        padding: 20px;
-        border-radius: 10px;
-        box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    }
-    h1 {
-        text-align: center;
-        margin-bottom: 20px;
-    }
-    label {
-        font-weight: bold;
-        margin-top: 10px;
-        display: block;
-    }
-    textarea, input, button {
-        width: 100%;
-        margin-top: 5px;
-        padding: 10px;
-        font-size: 16px;
-        border-radius: 5px;
-        border: 1px solid #ddd;
-        outline: none;
-    }
-    button {
-        background: #4CAF50;
-        color: white;
-        cursor: pointer;
-        border: none;
-        margin-top: 20px;
-    }
-    button:hover {
-        background: #45a049;
-    }
-    .recipe-card {
-        background: #fff7e6;
-        padding: 15px;
-        margin-top: 20px;
-        border-left: 5px solid #ffa502;
-        border-radius: 6px;
-    }
-    .steps {
-        margin-top: 10px;
-        padding-left: 20px;
-    }
-    .step {
-        margin-bottom: 10px;
-        padding: 10px;
-        background: #fafafa;
-        border-radius: 5px;
-        border-left: 3px solid #ccc;
-    }
-    .yt-link {
-        margin-top: 5px;
-        display: inline-block;
-        color: #1a73e8;
-        text-decoration: none;
-        font-size: 14px;
-    }
-</style>
+    <title>Smart Pasta Recipe Finder</title>
+
+    <style>
+
+        body{
+            font-family: Arial;
+            background:#f4f4f4;
+            padding:40px;
+        }
+
+        .container{
+            max-width:900px;
+            margin:auto;
+            background:white;
+            padding:30px;
+            border-radius:10px;
+        }
+
+        h1{
+            text-align:center;
+            color:#ff6600;
+        }
+
+        input, select{
+            width:100%;
+            padding:12px;
+            margin-top:10px;
+            margin-bottom:20px;
+            border:1px solid #ccc;
+            border-radius:5px;
+        }
+
+        button{
+            width:100%;
+            padding:12px;
+            background:#ff6600;
+            color:white;
+            border:none;
+            border-radius:5px;
+            font-size:16px;
+            cursor:pointer;
+        }
+
+        .recipe-box{
+            background:#fff3eb;
+            padding:20px;
+            margin-top:20px;
+            border-left:5px solid #ff6600;
+            border-radius:8px;
+        }
+
+        .chat-box{
+            margin-top:40px;
+            background:#f9f9f9;
+            padding:20px;
+            border-radius:10px;
+        }
+
+        .messages{
+            height:250px;
+            overflow-y:auto;
+            border:1px solid #ccc;
+            padding:10px;
+            margin-bottom:15px;
+            background:white;
+        }
+
+        .question-list{
+            background:#fff3eb;
+            padding:15px;
+            border-radius:8px;
+            margin-bottom:15px;
+        }
+
+        .question-list li{
+            margin-bottom:8px;
+        }
+
+    </style>
+
 </head>
+
 <body>
 
 <div class="container">
-    <h1>Smart Recipe Finder</h1>
 
-    <label>Ingredients You Have (comma-separated)</label>
-    <textarea id="ingredients" placeholder="pasta, garlic, tomatoes, milk"></textarea>
+    <h1>🍝 Smart Pasta Recipe Finder</h1>
 
-    <label>Type of Food You Want</label>
-    <input id="type" placeholder="pasta / rice / curry / dessert...">
+    <h2>Find Pasta Recipe</h2>
 
-    <label>Allergies (comma-separated)</label>
-    <input id="allergies" placeholder="milk, nuts, eggs">
+    <input type="text" id="ingredients" placeholder="Enter ingredients like pasta, cheese, tomato">
 
-    <button onclick="findRecipe()">Find Recipes</button>
+    <select id="pastaType">
+        <option>White Sauce Pasta</option>
+        <option>Red Sauce Pasta</option>
+        <option>Cheesy Pasta</option>
+        <option>Spicy Veg Pasta</option>
+    </select>
 
-    <div id="results"></div>
+    <button onclick="findRecipe()">Find Pasta Recipe</button>
+
+    <div id="recipeResult"></div>
+
+    <div class="chat-box">
+
+        <h2>🤖 Pasta Assistant Chatbot</h2>
+
+        <div class="question-list">
+
+            <h3>Questions You Can Ask:</h3>
+
+            <ul>
+                <li>hello</li>
+                <li>your name</li>
+                <li>white sauce pasta</li>
+                <li>red sauce pasta</li>
+                <li>cheesy pasta</li>
+                <li>spicy pasta</li>
+                <li>healthy pasta</li>
+                <li>protein pasta</li>
+                <li>cook pasta</li>
+                <li>ingredients</li>
+                <li>italian pasta</li>
+                <li>cheese in pasta</li>
+                <li>pasta sauce</li>
+                <li>pasta fact</li>
+                <li>pasta joke</li>
+                <li>dinner pasta</li>
+                <li>lunch pasta</li>
+                <li>motivation</li>
+            </ul>
+
+        </div>
+
+        <div class="messages" id="messages"></div>
+
+        <input type="text" id="chatInput" placeholder="Ask pasta questions...">
+
+        <button onclick="sendMessage()">Send</button>
+
+    </div>
+
 </div>
 
 <script>
-async function findRecipe() {
-    const ingredients = document.getElementById("ingredients").value
-        .split(",").map(s => s.trim()).filter(Boolean);
 
-    const type = document.getElementById("type").value.trim();
+async function findRecipe(){
 
-    const allergies = document.getElementById("allergies").value
-        .split(",").map(s => s.trim()).filter(Boolean);
+    let ingredients =
+        document.getElementById("ingredients")
+        .value
+        .split(",");
 
-    const payload = {
-        ingredients: ingredients,
-        desired_type: type,
-        allergies: allergies,
-        allow_substitutions: true,
-        use_youtube: true
-    };
+    let desired_type =
+        document.getElementById("pastaType")
+        .value;
 
-    const resBox = document.getElementById("results");
-    resBox.innerHTML = "<p>Loading...</p>";
+    const response = await fetch('/api/recipe',{
 
-    try {
-        const response = await fetch("http://127.0.0.1:5000/api/recipe", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(payload)
-        });
+        method:'POST',
 
-        const data = await response.json();
-        console.log("API Response:", data);
+        headers:{
+            'Content-Type':'application/json'
+        },
 
-        resBox.innerHTML = "";
+        body:JSON.stringify({
+            ingredients,
+            desired_type
+        })
 
-        // ---------------------------------------------------
-        // 🔥 CASE 1: AI GENERATED RECIPE (no DB match)
-        // ---------------------------------------------------
-        if (data.ai_generated === true && data.recipe) {
-    const recipe = data.recipe;
+    });
 
-    const card = document.createElement("div");
-    card.className = "recipe-card";
+    const data = await response.json();
 
-    card.innerHTML = `
-        <h2> AI-Generated Recipe: ${recipe.name}</h2>
-        <p><strong>Ingredients:</strong> ${recipe.ingredients_required.join(", ")}</p>
+    let html = "";
 
-        <h3>Steps:</h3>
-        <div class="steps">
-            ${recipe.steps.map((s, i) => `
-                <div class="step">
-                    <strong>Step ${i + 1}:</strong> ${s.text}
-                </div>
-            `).join("")}
+    data.candidates.forEach(recipe => {
+
+        html += `
+        <div class="recipe-box">
+
+            <h2>🍝 ${recipe.name}</h2>
+
+            <p><b>Missing Ingredients:</b>
+            ${recipe.missing_ingredients.join(", ")}</p>
+
+            <h3>Cooking Steps:</h3>
+
+            <ol>
+                ${recipe.steps.map(step =>
+                    `<li>${step}</li>`
+                ).join("")}
+            </ol>
+
         </div>
-    `;
+        `;
 
-    resBox.appendChild(card);
-    return;  // done
+    });
+
+    document.getElementById("recipeResult").innerHTML = html;
+
 }
 
+async function sendMessage(){
 
-        // ---------------------------------------------------
-        // 🔥 CASE 2: DB RECIPES FOUND
-        // ---------------------------------------------------
-        if (!data.candidates || data.candidates.length === 0) {
-            resBox.innerHTML = "<p>No recipes found.</p>";
-            return;
-        }
+    let input =
+        document.getElementById("chatInput");
 
-        data.candidates.forEach(recipe => {
-            const card = document.createElement("div");
-            card.className = "recipe-card";
+    let message = input.value;
 
-            card.innerHTML = `
-                <h2>${recipe.name}</h2>
-                <p><strong>Type:</strong> ${recipe.type}</p>
+    const response = await fetch('/chatbot',{
 
-                <p><strong>Missing Ingredients:</strong> 
-                    ${recipe.missing_ingredients.length > 0 
-                        ? recipe.missing_ingredients.join(", ") 
-                        : "None 🎉"}
-                </p>
+        method:'POST',
 
-                <p><strong>Substitutes:</strong></p>
-                <ul>
-                    ${Object.keys(recipe.substitutes).length > 0 
-                        ? Object.entries(recipe.substitutes)
-                            .map(([k,v]) => `<li>${k}: ${v.join(", ")}</li>`).join("")
-                        : "<li>No substitutes needed</li>"
-                    }
-                </ul>
+        headers:{
+            'Content-Type':'application/json'
+        },
 
-                <h3>Steps:</h3>
-                <div class="steps">
-                    ${recipe.steps.map((step, idx) => `
-                        <div class="step">
-                            <strong>Step ${idx+1}:</strong> ${step.text}
-                            ${step.note ? `<p style="color:red">${step.note}</p>` : ""}
-                            ${step.youtube 
-                                ? `<a class="yt-link" href="${step.youtube}" target="_blank">📺 Watch Video</a>` 
-                                : ""
-                            }
-                        </div>
-                    `).join("")}
-                </div>
-            `;
+        body:JSON.stringify({
+            message
+        })
 
-            resBox.appendChild(card);
-        });
+    });
 
-    } catch (err) {
-        console.error(err);
-        resBox.innerHTML = "<p>Error connecting to server.</p>";
-    }
+    const data = await response.json();
+
+    let messages =
+        document.getElementById("messages");
+
+    messages.innerHTML += `
+        <p><b>You:</b> ${message}</p>
+        <p><b>Pasta Bot:</b> ${data.reply}</p>
+    `;
+
+    input.value = "";
+
 }
 
 </script>
