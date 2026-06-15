@@ -9,19 +9,19 @@ pipeline {
     stages {
         stage('Build Docker Image') {
             steps {
-                bat "docker build -t %IMAGE_NAME%:%IMAGE_TAG% ."
+                sh "docker build -t %IMAGE_NAME%:%IMAGE_TAG% ."
             }
         }
 
         stage('Test') {
             steps {
-                bat "docker run --rm %IMAGE_NAME%:%IMAGE_TAG% python -m pytest tests/ --tb=short -v"
+                sh "docker run --rm %IMAGE_NAME%:%IMAGE_TAG% python -m pytest tests/ --tb=short -v"
             }
         }
 
         stage('Deploy') {
             steps {
-                bat """
+                sh """
                     docker stop %IMAGE_NAME% || exit 0
                     docker rm %IMAGE_NAME% || exit 0
                     docker run -d --name %IMAGE_NAME% -p 5000:5000 --env-file .env %IMAGE_NAME%:%IMAGE_TAG%
